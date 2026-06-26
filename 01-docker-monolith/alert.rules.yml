@@ -1,10 +1,11 @@
-# alert.rules.yml
 groups:
-- name: basic
-rules:
-- alert: TargetDown
-expr: up == 0
-for: 1m
-labels: { severity: warning }
-annotations:
-summary: "Target {{ $labels.job }} лежить уже хвилину"
+  - name: example
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
