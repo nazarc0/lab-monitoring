@@ -1,5 +1,6 @@
 # alertmanager.yml
 route:
-receiver: "devnull"
+  receiver: "devnull"
+
 receivers:
-- name: "devnull"
+  - name: "devnull"
