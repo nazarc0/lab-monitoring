@@ -3,7 +3,7 @@
 FROM prom/prometheus:latest AS prometheus
 FROM prom/alertmanager:latest AS alertmanager
 FROM prom/node-exporter:latest AS nodeexp
-FROM gcr.io/cadvisor/cadvisor:latest AS cadvisor
+#FROM ghcr.io/google/cadvisor:latest AS cadvisor
 FROM grafana/grafana:latest AS grafana
 # --- фінальний образ ---
 FROM ubuntu:22.04
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y supervisor ca-certificates && rm -rf /v
 COPY --from=prometheus /bin/prometheus /bin/prometheus
 COPY --from=alertmanager /bin/alertmanager /bin/alertmanager
 COPY --from=nodeexp /bin/node_exporter /bin/node_exporter
-COPY --from=cadvisor /usr/bin/cadvisor /usr/bin/cadvisor
+#COPY --from=cadvisor /usr/bin/cadvisor /usr/bin/cadvisor
 COPY --from=grafana / /grafana-root
 
 ENV GF_PATHS_CONFIG=/grafana-root/etc/grafana/grafana.ini \
