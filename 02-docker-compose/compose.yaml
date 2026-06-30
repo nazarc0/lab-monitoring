@@ -1,0 +1,53 @@
+# compose.yaml
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./alert.rules.yml:/etc/prometheus/alert.rules.yml:ro
+      - prometheus-data:/prometheus # дані переживають перезапуск
+    ports: 
+      - "9090:9090"
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    ports: 
+      - "9093:9093"
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS:-admin} # з .env, не хардкод
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports: 
+      - "3000:3000"
+    depends_on: 
+      - prometheus
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports: 
+      - "9100:9100"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports: 
+      - "8080:8080"
+
+  web:
+    image: nginx:alpine
+    ports: 
+      - "8081:80"
+
+  web-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    command: ["-nginx.scrape-uri=http://web:80/stub_status"]
+    depends_on: 
+      - web
+
+volumes:
+  grafana-data:
+  prometheus-data:
