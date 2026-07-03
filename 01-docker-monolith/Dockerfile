@@ -32,3 +32,6 @@ COPY alertmanager.yml /etc/alertmanager/alertmanager.yml
 COPY supervisord.conf /etc/supervisord.conf
 EXPOSE 3000 9090 9093 9100 8080
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+
+
+
