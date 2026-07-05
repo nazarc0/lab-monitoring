@@ -1,0 +1,64 @@
+name: Deploy ECS
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '03-aws-ecs/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: eu-central-1
+  
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_OIDC }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Prometheus
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: ./03-aws-ecs/config/prometheus
+        run: |
+          docker build -t $ECR_REGISTRY/lab-monitoring-prometheus:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/lab-monitoring-prometheus:$IMAGE_TAG
+
+      - name: Build and push Alertmanager
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: ./03-aws-ecs/config/alertmanager
+        run: |
+          docker build -t $ECR_REGISTRY/lab-monitoring-alertmanager:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/lab-monitoring-alertmanager:$IMAGE_TAG
+
+      - name: Build and push Nginx Web
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: ./03-aws-ecs/config/nginx
+        run: |
+          docker build -t $ECR_REGISTRY/lab-monitoring-web:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/lab-monitoring-web:$IMAGE_TAG
+
+      - name: Update ECS Services
+        run: |
+          # Команда для оновлення сервісів (ECS викачає нові образи з ECR)
+          aws ecs update-service --cluster lab-cluster --service monitoring-service --force-new-deployment
+          aws ecs update-service --cluster lab-cluster --service web-service --force-new-deployment

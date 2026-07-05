@@ -28,8 +28,7 @@ resource "aws_iam_role" "github_actions" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            # УВАГА: ЗАМІНИ ТУТ ЛОГІН І НАЗВУ РЕПОЗИТОРІЮ НА СВОЇ
-            "token.actions.githubusercontent.com:sub" = "repo:TVIY_GITHUB_LOGIN/lab-monitoring:*"
+            "token.actions.githubusercontent.com:sub" = "repo:nazarc0/lab-monitoring:*"
           }
         }
       }
@@ -68,7 +67,11 @@ resource "aws_iam_policy" "github_ecr_policy" {
           "ecr:PutImage"
         ]
         # Посилаємося на репозиторій, створений у файлі ecr.tf
-        Resource = aws_ecr_repository.lab_repo.arn 
+        Resource = [
+                   module.ecr.prometheus_arn,
+                   module.ecr.alertmanager_arn,
+                   module.ecr.web_arn
+        ]
       }
     ]
   })
