@@ -9,3 +9,9 @@ module "ecr" {
 module "network" {
   source = "./network"
 }
+
+module "env" {
+  source = "./env"
+    slack = var.slack
+}
+
