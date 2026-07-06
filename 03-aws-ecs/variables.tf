@@ -3,3 +3,4 @@ variable "slack" {
   type        = string
   sensitive   = true
 }
+

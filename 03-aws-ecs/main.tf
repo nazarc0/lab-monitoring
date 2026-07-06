@@ -15,3 +15,8 @@ module "env" {
     slack = var.slack
 }
 
+module "ecs" {
+  source = "./ecs"
+  vpc_id = module.network.vpc_id
+}
+
