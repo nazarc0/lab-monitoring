@@ -8,3 +8,4 @@
 *.tfvars.json
 .DS_Store
 Thumbs.db
+terraform.tfvars
