@@ -17,6 +17,9 @@ module "env" {
 
 module "ecs" {
   source = "./ecs"
-  vpc_id = module.network.vpc_id
+    vpc_id = module.network.vpc_id
+    private_subnet_a_id = module.network.private_subnet_a_id
+    private_subnet_b_id = module.network.private_subnet_b_id
+    vpc_cidr_block = module.network.cidrs
 }
 
