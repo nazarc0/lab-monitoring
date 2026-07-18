@@ -60,5 +60,5 @@ jobs:
       - name: Update ECS Services
         run: |
           # Команда для оновлення сервісів (ECS викачає нові образи з ECR)
-          aws ecs update-service --cluster lab-cluster --service monitoring-service --force-new-deployment
-          aws ecs update-service --cluster lab-cluster --service web-service --force-new-deployment
+          aws ecs update-service --cluster monitoring-cluster --service monitoring-service --force-new-deployment
+          aws ecs update-service --cluster monitoring-cluster --service web-service --force-new-deployment
