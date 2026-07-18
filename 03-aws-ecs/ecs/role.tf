@@ -5,7 +5,7 @@ resource "aws_iam_role" "ecs_execution_role" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole" # Дозвіл на дію "Взяти роль"
+        Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
           Service = "ecs-tasks.amazonaws.com"
@@ -26,7 +26,7 @@ resource "aws_iam_role_policy" "ecs_secrets_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow" # Дозволяємо...
+        Effect = "Allow"
         Action = [
           "ssm:GetParameters",            
           "secretsmanager:GetSecretValue"  

@@ -21,5 +21,11 @@ module "ecs" {
     private_subnet_a_id = module.network.private_subnet_a_id
     private_subnet_b_id = module.network.private_subnet_b_id
     vpc_cidr_block = module.network.cidrs
+    web_ecr_url = module.ecr.web_ecr_url
+    msg_arn = module.env.welcome_msg_arn
+    welcome_msg_arn = module.env.welcome_msg_arn
+    prometheus_ecr_url = module.ecr.prometheus_url    
+    grafana_admin_password_arn = module.env.grafana_admin_password_arn
+
 }
 
