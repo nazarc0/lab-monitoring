@@ -1,4 +1,3 @@
-# 1. Створюємо OIDC Провайдер для GitHub
 # 1. Автоматично стягуємо актуальний сертифікат із GitHub
 data "tls_certificate" "github" {
   url = "https://token.actions.githubusercontent.com"
@@ -13,7 +12,7 @@ resource "aws_iam_openid_connect_provider" "github" {
   thumbprint_list = [data.tls_certificate.github.certificates[0].sha1_fingerprint]
 }
 
-# 2. Роль для конвеєра з перевіркою репозиторію
+# 3. Роль для конвеєра з перевіркою репозиторію
 resource "aws_iam_role" "github_actions" {
   name = "GitHubActionsECRRole"
 
@@ -39,10 +38,10 @@ resource "aws_iam_role" "github_actions" {
   })
 }
 
-# 3. Політика доступу до ECR (Least Privilege)
+# 4. Політика доступу до ECR та ECS (Тут додано права для ECS)
 resource "aws_iam_policy" "github_ecr_policy" {
   name        = "GitHubActionsECRPolicy"
-  description = "Allow GitHub Actions to push images"
+  description = "Allow GitHub Actions to push images and update ECS"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -75,18 +74,26 @@ resource "aws_iam_policy" "github_ecr_policy" {
           module.ecr.alertmanager_arn,
           module.ecr.web_arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecs:UpdateService",
+          "ecs:DescribeServices"
+        ]
+        Resource = "*" 
       }
     ]
   })
 }
 
-# 4. Прикріплюємо політику до ролі
+# 5. Прикріплюємо політику до ролі
 resource "aws_iam_role_policy_attachment" "github_ecr_attach" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_ecr_policy.arn
 }
 
-# 5. ARN, який нам знадобиться для GitHub
+# 6. ARN, який нам знадобиться для GitHub
 output "github_actions_role_arn" {
   value = aws_iam_role.github_actions.arn
 }
