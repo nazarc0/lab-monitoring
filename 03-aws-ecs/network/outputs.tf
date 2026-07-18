@@ -17,3 +17,8 @@ output "cidrs" {
   description = "VPC CIDR"
   value = aws_vpc.main.cidr_block
 }
+
+output "alb_target_group_arn" {
+  description = "ARN of the ALB Target Group"
+  value       = aws_lb_target_group.alb_target_group.arn
+}

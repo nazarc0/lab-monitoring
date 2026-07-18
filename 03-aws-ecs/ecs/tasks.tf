@@ -14,6 +14,7 @@ resource "aws_ecs_task_definition" "web" {
       
       portMappings = [
         {
+          name          = "web"
           containerPort = 80
           hostPort      = 80
           protocol      = "tcp"
@@ -117,6 +118,7 @@ resource "aws_ecs_task_definition" "monitoring" {
       
       portMappings = [
         {
+          name          = "grafana"
           containerPort = 3000
           hostPort      = 3000
           protocol      = "tcp"

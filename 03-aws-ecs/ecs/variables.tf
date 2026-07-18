@@ -44,3 +44,8 @@ variable "grafana_admin_password_arn" {
   description = "ARN секрету з паролем для Grafana"
   type        = string
 }
+
+variable "alb_target_group_arn" {
+  description = "ARN нашої Target Group для підключення ALB до вебу"
+  type        = string
+}

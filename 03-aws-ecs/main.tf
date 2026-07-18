@@ -26,6 +26,7 @@ module "ecs" {
     welcome_msg_arn = module.env.welcome_msg_arn
     prometheus_ecr_url = module.ecr.prometheus_url    
     grafana_admin_password_arn = module.env.grafana_admin_password_arn
+    alb_target_group_arn = module.network.alb_target_group_arn
 
 }
 
