@@ -86,6 +86,13 @@ resource "aws_ecs_service" "monitoring_service" {
   launch_type     = "FARGATE"
   desired_count   = 1
 
+  # ДОДАНИЙ БЛОК: Підключаємо Grafana до ALB
+  load_balancer {
+    target_group_arn = var.grafana_target_group_arn
+    container_name   = "grafana"
+    container_port   = 3000
+  }
+
   network_configuration {
     subnets          = [var.private_subnet_a_id, var.private_subnet_b_id]
     security_groups  = [aws_security_group.ecs_tasks_sg.id]

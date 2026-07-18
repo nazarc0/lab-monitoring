@@ -22,3 +22,7 @@ output "alb_target_group_arn" {
   description = "ARN of the ALB Target Group"
   value       = aws_lb_target_group.alb_target_group.arn
 }
+
+output "grafana_target_group_arn" {
+  value = aws_lb_target_group.grafana_target_group.arn
+}

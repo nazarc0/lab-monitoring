@@ -27,6 +27,7 @@ module "ecs" {
     prometheus_ecr_url = module.ecr.prometheus_url    
     grafana_admin_password_arn = module.env.grafana_admin_password_arn
     alb_target_group_arn = module.network.alb_target_group_arn
+    grafana_target_group_arn = module.network.grafana_target_group_arn
 
 }
 

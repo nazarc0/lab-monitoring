@@ -49,3 +49,9 @@ variable "alb_target_group_arn" {
   description = "ARN нашої Target Group для підключення ALB до вебу"
   type        = string
 }
+
+
+variable "grafana_target_group_arn" {
+  description = "ARN of the Grafana Target Group from ALB"
+  type        = string
+}
