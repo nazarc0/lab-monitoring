@@ -33,7 +33,7 @@ jobs:
       - name: Build and push Prometheus
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         working-directory: ./03-aws-ecs/config/prometheus
         run: |
           docker build -t $ECR_REGISTRY/lab-monitoring-prometheus:$IMAGE_TAG .
@@ -42,7 +42,7 @@ jobs:
       - name: Build and push Alertmanager
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         working-directory: ./03-aws-ecs/config/alertmanager
         run: |
           docker build -t $ECR_REGISTRY/lab-monitoring-alertmanager:$IMAGE_TAG .
@@ -51,7 +51,7 @@ jobs:
       - name: Build and push Nginx Web
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         working-directory: ./03-aws-ecs/config/nginx
         run: |
           docker build -t $ECR_REGISTRY/lab-monitoring-web:$IMAGE_TAG .
@@ -60,5 +60,12 @@ jobs:
       - name: Update ECS Services
         run: |
           # Команда для оновлення сервісів (ECS викачає нові образи з ECR)
-          aws ecs update-service --cluster monitoring-cluster --service monitoring-service --force-new-deployment
-          aws ecs update-service --cluster monitoring-cluster --service web-service --force-new-deployment
+          aws ecs update-service --cluster monitoring-cluster --service monitoring-service --force-new-deployment --region eu-central-1
+          aws ecs update-service --cluster monitoring-cluster --service web-service --force-new-deployment --region eu-central-1
+
+
+
+          #TEST
+
+          #----
+            
