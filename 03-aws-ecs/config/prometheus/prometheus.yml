@@ -1,12 +1,11 @@
-# prometheus.yml
 global:
-  scrape_interval: 15s      # як часто збирати метрики
-  evaluation_interval: 15s  # як часто перевіряти правила алертів
+  scrape_interval: 15s
+  evaluation_interval: 15s
 
 alerting:
   alertmanagers:
     - static_configs:
-        - targets: ["alertmanager:9093"]  # у моноліті всі поруч -> localhost
+        - targets: ["alertmanager:9093"]
 
 rule_files:
   - "alert.rules.yml"
@@ -26,8 +25,4 @@ scrape_configs:
 
   - job_name: "nginx"
     static_configs:
-      - targets: ["web-exporter:9113"]  # sidecar exporter
-
-
-
-      #test
+      - targets: ["web-exporter:9113"]
